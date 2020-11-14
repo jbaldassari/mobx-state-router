@@ -1,4 +1,10 @@
-import { action, computed, decorate, IObservableArray, observable } from 'mobx';
+import {
+    action,
+    computed,
+    makeObservable,
+    IObservableArray,
+    observable,
+} from 'mobx';
 import { RootStore } from './RootStore';
 import { Item, OrderItem } from '../models';
 
@@ -8,6 +14,11 @@ export class CartStore {
 
     constructor(rootStore: RootStore) {
         this.rootStore = rootStore;
+        makeObservable(this, {
+            total: computed,
+            addOrder: action,
+            clearCart: action,
+        });
     }
 
     get total() {
@@ -26,9 +37,3 @@ export class CartStore {
         this.orderItems.clear();
     }
 }
-
-decorate(CartStore, {
-    total: computed,
-    addOrder: action,
-    clearCart: action,
-});

@@ -1,4 +1,4 @@
-import { action, decorate, IObservableArray, observable } from 'mobx';
+import { action, makeObservable, IObservableArray, observable } from 'mobx';
 import { RootStore } from './RootStore';
 import { Item } from '../models';
 import { CatalogService } from '../services';
@@ -10,6 +10,12 @@ export class ItemStore {
 
     constructor(rootStore: RootStore) {
         this.rootStore = rootStore;
+        makeObservable(this, {
+            selectedItem: observable.ref,
+            setItems: action,
+            clearItems: action,
+            setSelectedItem: action,
+        });
     }
 
     setItems(items: Array<Item>) {
@@ -44,10 +50,3 @@ export class ItemStore {
         this.setItems(items);
     };
 }
-
-decorate(ItemStore, {
-    selectedItem: observable.ref,
-    setItems: action,
-    clearItems: action,
-    setSelectedItem: action,
-});

@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { createLocation } from 'history';
-import { action, decorate, observable, runInAction } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 import { observer } from 'mobx-react';
 import React, { ReactNode } from 'react';
 import {
@@ -35,6 +35,13 @@ const selectedCar = `Tesla Model 3`;
 class TeslaStore {
     selectedCar: string = '';
 
+    constructor() {
+        makeObservable(this, {
+            selectedCar: observable,
+            loadSelectedCar: action,
+        });
+    }
+
     loadSelectedCar() {
         return new Promise((resolve) => {
             // emulate async load
@@ -47,11 +54,6 @@ class TeslaStore {
         });
     }
 }
-
-decorate(TeslaStore, {
-    selectedCar: observable,
-    loadSelectedCar: action,
-});
 
 const teslaStore = new TeslaStore();
 const routerStore = new RouterStore(routes, notFound, {
